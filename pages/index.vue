@@ -30,7 +30,7 @@
           <input
                :placeholder="options[currentOption].placeholder" 
           />
-          <i class="el-icon-search" ></i>
+          <i class="el-icon-search" @click="handlerSearch"></i>
         </el-row>
       </div>
     </div>
@@ -63,7 +63,7 @@ export default {
     };
   },
   mounted() {
-    this.$axios({
+       this.$axios({
       url: "/scenics/banners"
     }).then(res => {
       this.banners = res.data.data;
@@ -75,6 +75,12 @@ export default {
       const item = this.options[index]
       if(item.name==='机票'){
         return this.$router.push(item.pageUrl)
+      }
+    },
+    //点击搜索按钮跳转
+    handlerSearch(){
+      if(this.currentOption===0||this.currentOption===1){
+        this.$router.push(this.options[this.currentOption].pageUrl)
       }
     }
   }

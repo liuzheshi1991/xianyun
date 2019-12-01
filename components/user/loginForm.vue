@@ -24,6 +24,7 @@
             <nuxt-link to="#">忘记密码</nuxt-link>
         </p>
     <el-button class="submit" type="primary" @click="handlerLoginSubmit">登录</el-button>
+    
   </el-form>
 </template>
 
@@ -45,13 +46,12 @@ export default {
         handlerLoginSubmit(){
             this.$refs["form"].validate((valid)=>{
                 if(valid){
-                    this.$axios({
-                        url:'/accounts/login',
-                        method:'post',
-                        data:this.form
-                    }).then(res=>{
-                        console.log(res.data);
-                    })
+                this.$store.dispatch('user/login',this.form).then(res=>{
+                    this.$message.success('登录成功')
+                    setTimeout(() => {
+                        this.$router.replace('/')
+                    }, 1000);
+                })
                 }else{
                     return false;
                 }

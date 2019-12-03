@@ -28,5 +28,12 @@ export const actions ={
         }).then(res=>{
             commit('setUserInfo',res.data)
         })
+    },
+    register({commit},props){
+        return this. $axios({
+            url:'/accounts/register',
+            method:'POST',
+             data:props
+        })
     }
 }

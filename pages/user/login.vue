@@ -23,7 +23,7 @@
                 <LoginForm v-if="currentTab == 0"/>
 
                 <!-- 注册功能组件 -->
-                <!-- <RegisterForm v-if="currentTab == 1"/> -->
+                <RegisterForm v-if="currentTab == 1" @chargeCurrent='goLogin'/>
             </div>
         </el-row>
     </div>
@@ -31,9 +31,11 @@
 
 <script>
 import LoginForm from '@/components/user/loginForm.vue'
+import RegisterForm from '@/components/user/registerForm.vue'
 export default {
     components: {
-        LoginForm
+        LoginForm,
+        RegisterForm
     },
     data(){
         return {
@@ -43,6 +45,9 @@ export default {
     methods: {
       handlerTab(index){
           this.currentTab=index
+      },
+      goLogin(){
+          this.currentTab=0
       }
         }
     }

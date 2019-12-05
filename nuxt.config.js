@@ -38,6 +38,7 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     { src: '@/plugins/localStorage', ssr: false },
+    
     '@/plugins/axios.js'
   ],
 

@@ -15,6 +15,7 @@
                 <!-- fetch-suggestions 返回输入建议的方法 -->
                 <!-- select 点击选中建议项时触发 -->
                 <el-autocomplete
+                :highlight-first-item ="true"
                 v-model="form.departCity"
                 :fetch-suggestions="queryDepartSearch"
                 placeholder="请搜索出发城市"
@@ -24,6 +25,7 @@
             </el-form-item>
             <el-form-item label="到达城市">
                 <el-autocomplete
+                :highlight-first-item ="true"
                 v-model="form.destCity"
                 :fetch-suggestions="queryDestSearch"
                 placeholder="请搜索到达城市"
@@ -56,6 +58,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
     data(){
         return {
@@ -76,11 +79,14 @@ export default {
     methods: {
         // tab切换时触发
         handleSearchTab(item, index){
-                this.$confirm('此功能暂未开放,请选择单程票', '提示', {
+          if(index===1){
+            this.$confirm('此功能暂未开放,请选择单程票', '提示', {
                 confirmButtonText: '确定',
                 showCancelButton: false,
                 type: 'warning'
         })
+          }
+                
         },
         //因为出发地和到达地的输入之后有对应的值出来的逻辑都是一样的，可以封装成一个函数
     querySearchAsync(queryString) {
@@ -99,13 +105,18 @@ export default {
           const { data } = res.data;
 
           // 下拉提示列表必须要有value字段
-          const arr = data.map(v => {
+          const citys = data.map(v => {
             return {
               ...v,
               value: v.name.replace("市", "")
             };
           });
-          resolve(arr);
+          const cityList = citys.filter(item=>{
+            if(item.sort){
+              return true
+            }
+          })
+          resolve(cityList);
         });
       });
     },
@@ -115,7 +126,7 @@ export default {
         async queryDepartSearch(value, cb){
            var arr = await this.querySearchAsync(value)
            if(arr.length){
-               this.form.departCity = arr[0].value
+             
                 this.form.departCode = arr[0].sort;
            }
            cb(arr)
@@ -126,7 +137,7 @@ export default {
        async queryDestSearch(value, cb){
              var arr = await this.querySearchAsync(value)
            if(arr.length){
-               this.form.destCity = arr[0].value
+           
                 this.form.destCode = arr[0].sort;
            }
            cb(arr)
@@ -134,29 +145,42 @@ export default {
        
         // 出发城市下拉选择时触发
         handleDepartSelect(item) {
-            
+            this.departCode = item.sort
         },
 
         // 目标城市下拉选择时触发
         handleDestSelect(item) {
-            
+            this.destCode =item.sort
         },
 
         // 确认选择日期时触发
         handleDate(value){
-           
+          this.form.departDate= moment(value).format('YYYY-MM-DD')
         },
 
         // 触发和目标城市切换时触发
         handleReverse(){
-            var reverseCity = this.form.departCity
-            this.form.departCity = this.form.destCity
-            this.form.destCity = reverseCity
+          var {departCity,departCode,destCity,destCode} = this.form
+          this.form.departCity = destCity
+          this.form.destCity = departCity
+          this.form.departCode = destCode
+          this.form.destCode = departCode
         },
 
         // 提交表单是触发
         handleSubmit(){
-           console.log(this.form);
+         for(var o in this.form){
+           if(this.form[o].endsWith('市')){
+             this.form[o] = this.form[o].replace('市','')
+           }
+         }
+         
+        
+           console.log(this.form),
+         this.$router.push({
+           path:'/air/flights',
+           query:this.form
+         })
         }
     },
     mounted() {

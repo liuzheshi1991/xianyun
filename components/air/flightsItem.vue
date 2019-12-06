@@ -1,8 +1,8 @@
 <template>
     <div class="flight-item">
-        <div>
+        <div @click="handleShowRecommend">
             <!-- 显示的机票信息 -->
-            <el-row type="flex" align="middle" class="flight-info" @click="handleShowRecommend">
+            <el-row type="flex" align="middle" class="flight-info" >
                 <el-col :span="6">
                     <span>{{data.airline_name}}</span> {{data.flight_no}}
                 </el-col>
@@ -13,7 +13,7 @@
                             <span>{{data.org_airport_name+data.org_airport_quay}}</span>
                         </el-col>
                         <el-col :span="8" class="flight-time">
-                            <span>2时20分</span>
+                            <span>{{duration}}</span>
                         </el-col>
                         <el-col :span="8" class="flight-airport">
                             <strong>{{data.arr_time}}</strong>
@@ -55,6 +55,7 @@
                 </el-col>
             </el-row>
         </div>
+      
     </div>
 </template>
 
@@ -66,12 +67,30 @@ export default {
             showRecommend:false
         }
     },
+    computed: {
+        duration(){                            
+            
+            var arrTime = new Date(this.data.arr_datetime).getTime()
+            var depTime = new Date(this.data.dep_datetime).getTime()
+            var durationMinutes = (arrTime - depTime)/(1000*60)
+            
+          
+            if(durationMinutes<0){
+                durationMinutes  = durationMinutes + 24*60
+                  }
+            var hours = Math.floor(durationMinutes/60)
+            var minutes = durationMinutes%60
+                 return `${hours}小时${minutes}分钟`
+           
+        }
+    },
     methods: {
         //控制隐藏以及显示
         handleShowRecommend(){
             console.log(123);
             this.showRecommend = !this.showRecommend
         }
+     
     }
 }
 </script>

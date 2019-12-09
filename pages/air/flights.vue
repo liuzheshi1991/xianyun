@@ -50,6 +50,7 @@ import FlightsItem from '@/components/air/flightsItem.vue'
 import FlightsFilters from '@/components/air/flightsFilters.vue'
 import FlightsAside from '@/components/air/flightsAside.vue'
 export default {
+  
     components: {
         FlightsListHead,
         FlightsItem,

@@ -58,6 +58,9 @@
 <script>
 import SearchForm from '@/components/air/searchForm'
 export default {
+    transition:{
+        enterActiveClass:'animated fadeInLeftBig'
+    },
   components: {
     SearchForm
   },

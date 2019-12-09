@@ -174,7 +174,7 @@ export default {
              this.form[o] = this.form[o].replace('市','')
            }
          }
-         
+         this.$store.commit('history/addHistoryItem',this.form)
         
            console.log(this.form),
          this.$router.push({

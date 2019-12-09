@@ -88,3 +88,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+#git 上忽略此文件
+package-lock.json

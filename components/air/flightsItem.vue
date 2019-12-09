@@ -45,6 +45,7 @@
                         </el-col>
                         <el-col :span="3" class="choose-button">
                             <el-button 
+                            @click="toOrderPage(item.seat_xid)"
                             type="warning" 
                             size="mini">
                             选定
@@ -85,6 +86,16 @@ export default {
         }
     },
     methods: {
+        //选定机票跳转到支付页面
+        toOrderPage(seatId){
+            this.$router.push({
+                path:'/air/order',
+                query:{
+                    id:this.data.id,
+                    seat_xid:seatId
+                }
+            })
+        },
         //控制隐藏以及显示
         handleShowRecommend(){
             console.log(123);
